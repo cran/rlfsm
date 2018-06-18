@@ -169,3 +169,70 @@ path<-function(N=NULL,m,M,alpha,H,sigma,freq,disable_X=FALSE,levy_increments=NUL
          levy_increments=levy_increments, pars=c(alpha=alpha,H=H,sigma=sigma), frequency=freq)
 
 }
+
+
+
+
+
+#### Fast version of path for CLT ####
+
+# Technical function. Unavailable for users
+path_fast<-function(N,m,M,alpha,H,sigma,freq){
+
+        ### Part 1. Generating levy motion.
+
+        #### clause 3
+        Z<-rstable(m*(N+M),alpha,beta=0) # standart SaS variables
+        levy_increments<-c(Z[(m*N+1):(m*(M+N))],Z[1:(m*N)])
+
+
+    ### Setting of the frequency
+
+    # freq may take only "H" and "L" values(high- and low frequency settings)
+    if(freq=="H") {multiplier<-1/(N^H); coords<-seq(from = 0, to = 1, length.out = N+1)
+    } else if (freq=="L") {multiplier<-1;  coords<-seq(from = 0, to =N)
+    } else stop("the freq takes only two parameters- H and L ")
+
+
+    #### Extraction of levy motion
+    #L_noise<-Z[1:(m*N)]
+    LM<-vector(mode="numeric",length=N)
+    LM_N<-0
+
+    for(i in 1:N){
+
+        LM[i]<-LM_N+sum(Z[(m*(i-1)+1):(m*i)])
+        LM_N<-LM[i]
+
+    }
+    LM<-c(0,LM) # LM[0] is not 0, but it can be for the time being
+
+    ### Part 2. Generating linear fractional stable motion.
+
+
+        ##### clause 2
+        a_t<-a_tilda(N,m,M,alpha,H)*sigma
+
+        a_hat<-fft(a_t)
+
+        ##### clause 3
+        Z_hat<-fft(Z)
+
+        #### clause 4
+        # In R the definition of inverse fft lacks the
+        # normalization constant, so here we divide by it explicitly.
+        W_raw<-fft(a_hat*Z_hat, inverse=TRUE)/length(a_hat)
+        W<-W_raw[1:(m*N)]
+
+        #### clause 5
+        index_m<-m*(1:(length(W)/m))
+        Y_m_M<-Re(W[index_m]) # although W is real, 0i-part isn't needed
+
+        X<-vector(mode="numeric",length=length(Y_m_M))
+        X<-cumsum(Y_m_M)
+        X<-c(0,X) # lfsm starts from zero (t=0 => kernel = 0)
+
+
+    multiplier*X
+
+}

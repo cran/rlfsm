@@ -19,13 +19,13 @@ Works in conjunction with \code{\link{CLT}} function.
 }
 \examples{
 \donttest{
-m<-35; M<-50
+m<-45; M<-60
 
 p<-.4; p_prime<-.2
 t1<-1; t2<-2; k<-2
 
-NmonteC<-5e1
-S<-c(1e3,5e3)
+NmonteC<-5e2
+S<-c(1e3,1e4)
 alpha<-.8; H<-0.8; sigma<-0.3
 theor_4_1_clt_new<-CLT(s=S,fr='L',Nmc=NmonteC,
                        m=m,M=M,

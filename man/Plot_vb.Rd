@@ -36,9 +36,9 @@ Plot_vb(theor_3_1_H_clt$BSdM)
 # More demanding example (it is better to use multicore setup)
 # General low frequency inference
 
-m<-35; M<-50
+m<-45; M<-60
 alpha<-0.8; H<-0.8; sigma<-0.3
-S<-c(1:10)*1e2
+S<-c(1:15)*1e2
 p<-.4; t1<-1; t2<-2
 NmonteC<-50
 

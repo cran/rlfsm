@@ -1,7 +1,7 @@
 # Here we have a problem with import
 #' Parameter estimation procedure in continuous case.
 #'
-#' 'Unnecessary' parameter freq is preserved to allow for investigation of the inference procedure in high frequency case
+#' Parameter freq is preserved to allow for investigation of the inference procedure in high frequency case.
 #' @import doParallel
 #' @import foreach
 #' @import ggplot2

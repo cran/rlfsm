@@ -1,16 +1,27 @@
 
 #### CLT function ####
 #' The function explores numerical properties of statistical estimators operating on random processes.
-#' 
-#' The function performs Monte-Carlo experiments to compute parameters according to procedure Inference.
-#' For each element of s it generates Nmc lfsm sample paths with N=s[i], performs the statistical
-#' inference on each, and then returns their different statistics.
+#'
+#' The function is useful, for instance, when one needs to compute standard deviation of \eqn{\widehat \alpha_{high}}
+#' estimator given a fixed set of parameters.
+#'
+#' CLT  performs Monte-Carlo experiments to compute parameters according to procedure Inference.
+#' More specifically, for each element of s it generates Nmc lfsm sample paths with length equal to s[i], performs the statistical
+#' inference on each, obtaining the estimates, and then returns their different statistics.
+#'
+#' For sample path generation CLT uses a light-weight version of path, path_fast.
 #' @param Nmc Number of Monte Carlo repetitions
 #' @param Inference statistical function to apply to sample paths
 #' @param s sequence of path lengths
 #' @inheritParams path
 #' @param fr frequency. Either "H" or "L"
 #' @param ... parameters to pass to Inference
+#' @return It returns a list containing the following components:
+#'     \item{CLT_dataset}{a data frame, standardized values of the estimates depending on path length s}
+#'     \item{BSdM}{a data frame, means, biases and standard deviations depending on s}
+#'     \item{Inference}{a closure used to obtain estimates}
+#'     \item{alpha, H, sigma}{the parameters for which CLT performs path generation}
+#'     \item{freq}{frequency, either 'L'  for low- or 'H' for high frequency}
 #' @export
 #' @examples
 #' #### Set of global parameters ####
@@ -30,7 +41,6 @@ CLT<-function(Nmc,s,m,M,alpha,H,sigma,fr,Inference,...){
 
     i<-integer(0) # avoids NOTEs when being builded
     ind<-integer(0) # avoids NOTEs when being builded
-    #r<-vector(mode="numeric") r- data frame
     index<-NULL; indexD<-NULL; indexF<-NULL
 
     CLT_dataset<-data.frame()
@@ -43,7 +53,7 @@ CLT<-function(Nmc,s,m,M,alpha,H,sigma,fr,Inference,...){
 
         data<-foreach (ind = 1:Nmc, .combine = rbind, .packages='stabledist', .export = LofF, .inorder=FALSE) %dopar% {
 
-            path <- path(N=s[i],m=m,M=M,alpha=alpha,H=H,sigma=sigma,freq=fr)$lfsm
+            path <- path_fast(N=s[i],m=m,M=M,alpha=alpha,H=H,sigma=sigma,freq=fr)
             LL<-Inference(path=path,freq=fr,...)
             # check if the inference gives no errors (alpha>0 case).
             # Cases with errors are not included.
@@ -52,7 +62,6 @@ CLT<-function(Nmc,s,m,M,alpha,H,sigma,fr,Inference,...){
         }
         if(!is.null(data)){
 
-            #indexF<-c(1,2,1,2,1,2)
             indexF<-c("Sd","Mean","Sd","Mean","Sd","Mean")
             indexD<-c('alpha','alpha','H','H','sigma','sigma')
 
@@ -65,10 +74,8 @@ CLT<-function(Nmc,s,m,M,alpha,H,sigma,fr,Inference,...){
             MeanSdData<-foreach (index = 1:6, .combine = c, .export = VofF) %dopar% {
 
                 ParFs[[indexF[index]]](data[,indexD[index]])
-                #names(MeanSdData)[index]<-indexD[index]
 
             }
-            #names(MeanSdData)<-c("H_m","H_sd","alpha_m","alpha_sd","sigma_m","sigma_sd")
             names(MeanSdData)<-stringi::stri_join(indexD, indexF, sep="_")
 
 

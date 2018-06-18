@@ -18,7 +18,7 @@ ContinEstim(t1, t2, p, k, path, freq)
 \item{freq}{Frequency of the motion. It can take two values: "H" for high frequency and "L" for the low frequency setting.}
 }
 \description{
-'Unnecessary' parameter freq is preserved to allow for investigation of the inference procedure in high frequency case
+Parameter freq is preserved to allow for investigation of the inference procedure in high frequency case.
 }
 \examples{
 m<-45; M<-60; N<-2^10-M
