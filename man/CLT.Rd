@@ -42,9 +42,12 @@ estimator given a fixed set of parameters.
 \details{
 CLT  performs Monte-Carlo experiments to compute parameters according to procedure Inference.
 More specifically, for each element of s it generates Nmc lfsm sample paths with length equal to s[i], performs the statistical
-inference on each, obtaining the estimates, and then returns their different statistics.
+inference on each, obtaining the estimates, and then returns their different statistics. It is vital that the estimator
+returns a list of named parameters (one or several of 'sigma', 'alpha' and 'H'). CLT uses the names to lookup the true
+parameter value and compute its bias.
 
-For sample path generation CLT uses a light-weight version of path, path_fast.
+For sample path generation CLT uses a light-weight version of path, path_fast. In order to be applied,
+function Inference must accept argument 'path' as a sample path.
 }
 \examples{
 #### Set of global parameters ####
@@ -54,10 +57,42 @@ t1<-1; t2<-2
 NmonteC<-5e1
 S<-c(1e2,3e2)
 alpha<-1.8; H<-0.8; sigma<-0.3
+
+
+# How to plot empirical density
+\donttest{
 theor_3_1_H_clt<-CLT(s=S,fr='H',Nmc=NmonteC,
                      m=m,M=M,alpha=alpha,H=H,
                      sigma=sigma,ContinEstim,
                      t1=t1,t2=t2,p=p,k=k)
 l_plot<-Plot_dens(par_vec=c('sigma','alpha','H'),
                   CLT_data=theor_3_1_H_clt, Nnorm=1e7)
+
+}
+
+# For CLT() it is vital that the estimator returns a list of named parameters
+
+H_hat_f <- function(p,k,path) {hh<-H_hat(p,k,path); list(H=hh)}
+theor_3_1_H_clt<-CLT(s=S,fr='H',Nmc=NmonteC,
+                     m=m,M=M,alpha=alpha,H=H,
+                     sigma=sigma,H_hat_f,
+                     p=p,k=k)
+
+
+# The estimator can return one, two or three of the parameters.
+
+est_1 <- function(path) list(H=1)
+theor_3_1_H_clt<-CLT(s=S,fr='H',Nmc=NmonteC,
+                     m=m,M=M,alpha=alpha,H=H,
+                     sigma=sigma,est_1)
+
+est_2 <- function(path) list(H=0.8, alpha=1.5)
+theor_3_1_H_clt<-CLT(s=S,fr='H',Nmc=NmonteC,
+                     m=m,M=M,alpha=alpha,H=H,
+                     sigma=sigma,est_2)
+
+est_3 <- function(path) list(sigma=5, H=0.8, alpha=1.5)
+theor_3_1_H_clt<-CLT(s=S,fr='H',Nmc=NmonteC,
+                     m=m,M=M,alpha=alpha,H=H,
+                     sigma=sigma,est_3)
 }

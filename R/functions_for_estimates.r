@@ -1,20 +1,19 @@
 
-# registerDoParallel(cores=30)
-
 #### Higher order increments ####
-# The same in low & high frequency setting.
-# Add an error message when i>N
 
 #' Higher order increments
 #'
 #' Difference of the kth order. Defined as following:
 #' \deqn{\Delta_{i,k}^{n,r} X:= \sum_{j=0}^k (-1)^j{{k}\choose{j}}X_{(i-rj)/n}, i\geq rk.}
-#' i here is a coordinate in terms of point_num. Although R uses indexes for a vector
-#' that start from 1, increment treats it as though it varied from 0 to N, so that a
+#' Index i here is a coordinate in terms of point_num. Although R uses vector indexes
+#' that start from 1, increment has i varying from 0 to N, so that a
 #' vector has a length N+1. It is done in order to comply with the notation of the paper.
 #' This function doesn't allow for choosing frequency n. The frequency is determined by the
 #' path supplied, thus n equals to either the length of the path in high frequency setting
-#' or 1 in low frequency setting.
+#' or 1 in low frequency setting. increment() gives increments at certain point passed as i,
+#' which is a vector here. increments() computes high order increments for the whole sample
+#' path. The first function evaluates the formula above, while the second one uses structure
+#' diff(diff(...)) because the formula is slower at higher k.
 #'
 #' @param r difference step, a natural number
 #' @param i index of the point at which the increment is to be computed, a natural number.
@@ -35,22 +34,41 @@
 #'
 #' increment(r=3,i=50,k=3,path=lfsm)
 #'
+#'
+# The functions produce the same result on the whole path
+#' path=c(1,4,3,6,8,5,3,5,8,5,1,8,6)
+#'
+#' r=2; k=3
+#' n <- length(path) - 1
+#' DeltaX = increment(seq(r*k, n), path = path, k = k, r = r)
+#' DeltaX == increments(k=k,r=r,path)
 #' @export
 increment<-function(r,i,k,path) {
 
-    if (i<r*k) stop("i must be greater or equal to r*k") else
+    if (sum(i<r*k)) stop("i must be greater or equal to r*k") else
     {
-	#if(i==r*k) S<-0 else
-	#{
 	    S<-0
 	    for (j in 0:k)
 	    {
 		    S<-S + (-1)^j * choose(k,j) * path[i+1-r*j]
 	    }
 
-	#}
 	S
     }
+}
+
+
+#' @rdname increment
+#' @export
+increments<-function(k,r,path) {
+
+        for (j in 1:k)
+        {
+            n<-length(path)
+            path<-(path[(r+1):n] - path[1:(n-r)])
+        }
+
+    path
 }
 
 #' Statistic V
@@ -115,11 +133,11 @@ increment<-function(r,i,k,path) {
 #'
 #' @export
 #### V high / low ####
+
 sf<-function(path,f,k,r,H,freq,...){
 
-    n<-length(path)-1 # -1 because we have additional zero and the index starts with 1.
-    vector<-seq(r*k,n,by=1) # is passed as i to increment
-    v1<-sapply(vector,FUN=increment,r=r,k=k,path=path)
+    n<-length(path)-1 # -1 because the scalling factor is 1/(n-1)
+    v1<-increments(k=k,r=r,path=path)
 
     if(freq=='L') v2<-sapply(v1,FUN=f,...) else{
         if(freq=='H') v2<-sapply((n^H)*v1,FUN=f,...) else{
@@ -128,7 +146,6 @@ sf<-function(path,f,k,r,H,freq,...){
     }
     sum(v2)/(length(v2))
 }
-
 
 # Deterministic version from Theorem 4.5
 #' m(-p,k)
@@ -172,16 +189,14 @@ m_pk<-function(k,p,alpha,H,sigma){
 #' @export
 R_hl<-function(p,k,path){
 
-    n=length(path)-1 # -1 because we have additional zero and the index starts with 1.
+    n=length(path)-1
     if (n<2*k) stop('X has too few points for the chosen k')
-    S_up<-0
-    for(i in (2*k):n) S_up<-S_up+(abs(increment(2, i, k, path)))^p
 
-    S_low<-0
-    for(i in k:n) S_low<-S_low+(abs(increment(1, i, k, path)))^p
-
+    S_up<-sum((abs(increments(r=2, k=k, path=path)))^p)
+    S_low<-sum((abs(increments(r=1, k=k, path=path)))^p)
     S_up/S_low
 }
+
 
 
 #### Statistical estimator of H in high/low frequency setting ####
@@ -217,28 +232,31 @@ H_hat<-function(p,k,path){
 phi<-function(t,k,path,H,freq){
 
     N<-length(path)-1
-    S<-0
 
     if(freq=="L") {
-	    FreqFactor<-1
+        FreqFactor<-1
     } else {
 
-	    if(freq=="H"){
-	        FreqFactor<-N^H
-	    } else {
-	        stop("parameter freq can take only two values- 'H' and 'L' ")
-	    }
+        if(freq=="H"){
+            FreqFactor<-N^H
+        } else {
+            stop("parameter freq can take only two values- 'H' and 'L' ")
+        }
 
     }
 
-    for(i in k:N){
-
-        S<-S+1/(N-k)*cos(t*FreqFactor*increment(r=1,i,k,path)) # we have N-1 meaningfull points
-    }
-
-    S
+    v1<-increments(k=k,r=1,path=path)
+    sum(cos(t*FreqFactor*v1))/(N-k)
 }
 
+# not for export
+phi_low<-function(t,k,path){
+
+    N<-length(path)-1
+    v1<-increments(k=k,r=1,path=path)
+    sum(cos(t*v1)/(N-k))
+
+}
 
 ## alpha_hat estimation
 # |phi| is used

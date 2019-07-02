@@ -4,7 +4,7 @@
 \alias{GenLowEstim}
 \title{Low frequency estimation procedure for lfsm.}
 \usage{
-GenLowEstim(t1, t2, p, path, freq)
+GenLowEstim(t1, t2, p, path, freq = "L")
 }
 \arguments{
 \item{t1}{real number such that  t2 > t1 > 0}
@@ -18,7 +18,7 @@ GenLowEstim(t1, t2, p, path, freq)
 \item{freq}{Frequency of the motion. It can take two values: "H" for high frequency and "L" for the low frequency setting.}
 }
 \description{
-General estimation procedure for low frequency case when 1/alpha is not a natural number
+General estimation procedure for low frequency case when 1/alpha is not a natural number.
 }
 \examples{
 m<-45; M<-60; N<-2^10-M

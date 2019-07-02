@@ -25,7 +25,7 @@ a_tilda<-function(N, m, M, alpha, H){
 
 #' Generator of linear fractional stable motion
 #'
-#' The function creates a lfsm sample path using the numerical algorithm from the paper by Stoev and Taqqu. Linear fractional stable motion is defined as
+#' The function creates a 1-dimensional lfsm sample path using the numerical algorithm from the paper by Stoev and Taqqu. Linear fractional stable motion is defined as
 #' \deqn{X_t = \int_{\R} \left\{(t-s)_+^{H-1/\alpha} - (-s)_+^{H-1/\alpha} \right\} dL_s}
 #' @return It returns a list containing the motion, the underlying Levy motion, the point number of the motions from 0 to N and the corresponding coordinate (which depends on the frequency), the parameters that were used to generate the lfsm, and the predefined frequency.
 #' @param N a number of points of the lfsm.
@@ -45,7 +45,7 @@ a_tilda<-function(N, m, M, alpha, H){
 #' # Path generation
 #'
 #' m<-256; M<-600; N<-2^10-M
-#' alpha<-1.8; H<-0.8; sigma<-1
+#' alpha<-1.8; H<-0.8; sigma<-0.3
 #' seed=2
 #'
 #' List<-path(N=N,m=m,M=M,alpha=alpha,H=H,

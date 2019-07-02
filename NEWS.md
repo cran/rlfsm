@@ -1,7 +1,12 @@
-# rlfsm 0.2.0
+# rlfsm 0.2.1
 
-* CLT function was equipped with a faster version of the sample path generator which is unavailable for users. User version (fucntion path) remains intact.
+* Various optimizations were implemented in functions related to increment().
 
-* CLT documentation was amended.
+* Parameter estimator from Ljungdahl and Podolskij, 2019 was added.
 
-* The developer repository was moved to Gitlab.com.
+* CLT() was largely amended.
+
+* New plotting function for rlfsm sample paths was added.
+
+* Slight changes to documentation were introduced.
+

@@ -30,17 +30,17 @@
 ContinEstim<-function(t1,t2,p,k,path,freq){
 
     H_est  <- H_hat(p,k,path)
+    if(H_est<=0 | H_est>=1) return('H estimate is not in (0,1)')
+
     alpha_est <- alpha_hat(t1,t2,k,path,H_est,freq)
+    if(alpha_est<=0 | alpha_est>=2) return('alpha estimate is not in (0,2)')
 
+    sigma_est<-tryCatch(
+        sigma_hat(t1,k,path,alpha_est,H_est,freq),
+        error=function(c) 'Something went wrong while computing sigma_hat')
 
-    if(alpha_est<=1 | alpha_est>=2) return('alpha estimate is not in (1,2)') else {
+    list(alpha=alpha_est,H=H_est,sigma=sigma_est)
 
-        if(H_est<=1/2 | H_est>=1) return('H estimate is not in (1/2,1)') else {
-
-                sigma_est <- sigma_hat(t1,k,path,alpha_est,H_est,freq)
-                list(alpha=alpha_est,H=H_est,sigma=sigma_est)
-        }
-    }
 }
 
 
@@ -48,7 +48,7 @@ ContinEstim<-function(t1,t2,p,k,path,freq){
 # !!!! In theorem 4.1 frequency is always low
 #' Low frequency estimation procedure for lfsm.
 #'
-#' General estimation procedure for low frequency case when 1/alpha is not a natural number
+#' General estimation procedure for low frequency case when 1/alpha is not a natural number.
 #' @inheritParams ContinEstim
 #' @inheritParams path
 #' @references \insertRef{MOP18}{rlfsm}
@@ -75,17 +75,16 @@ ContinEstim<-function(t1,t2,p,k,path,freq){
 #'
 #' GenLowEstim(t1=t1,t2=t2,p=p,path=lfsm,freq="H")
 #' @export
-GenLowEstim<-function(t1,t2,p,path,freq){
+GenLowEstim<-function(t1,t2,p,path,freq='L'){
 
-    H_0<-H_hat(p=p,k=1,path=path)
+    H_0<-H_hat(p=-p,k=1,path=path)
 
     alpha_0<-alpha_hat(t1=t1,t2=t2,k=1,path=path,H=H_0,freq=freq)
-    if(alpha_0<=0) return('alpha_0 estimate is not in (0,2)') else {
+    if(alpha_0<=0) return('alpha_0 estimate is less or equal to 0') else {
 
     k_new<-2+floor(alpha_0^(-1))
 
-    if(k_new>(length(path)-1)) return('k estimate is larger than the path length')
-    if(2*k_new>(length(path)-1)) return('2k estimate is larger than the path length. Can\'t use R_hl')
+    if(2*k_new>length(path)) return('2k estimate is larger than the path length. Can\'t use R_hl')
 
     H_est<-H_hat(p=-p,k=k_new,path=path)
         if(is.nan(H_est)) return('H cannot be estimated')
@@ -169,6 +168,7 @@ GenHighEstim<-function(p,p_prime,path,freq,low_bound=0.01,up_bound=4){
 
     # Find a preliminary estimate for H
     H_0<-H_hat(p=-p,k=1,path=path)
+    if(H_0<=0 | H_0>=1) return('H estimate is not in (0,1)')
 
     m_numer_est<-sf(path=path,f=f_p,k=1,r=1,H=H_0,freq=freq, p=-p_prime)
     m_denom_est<-sf(path=path,f=f_p,k=1,r=1,H=H_0,freq=freq, p=-p)
@@ -186,6 +186,7 @@ GenHighEstim<-function(p,p_prime,path,freq,low_bound=0.01,up_bound=4){
 
     # Find an estimate for H
     H_est<-H_hat(p=-p,k=k_est,path=path)
+    if(H_est<=0 | H_est>=1) return('H estimate is not in (0,1)')
 
     m_numer_est<-sf(path=path,f=f_p,k=k_est,r=1,H=H_0,freq=freq, p=-p_prime)
     m_denom_est<-sf(path=path,f=f_p,k=k_est,r=1,H=H_0,freq=freq, p=-p)
@@ -196,7 +197,7 @@ GenHighEstim<-function(p,p_prime,path,freq,low_bound=0.01,up_bound=4){
     alpha_est<-try(uniroot(Funct, interval= c(low_bound,up_bound))$root, silent=T)
     if(is(alpha_est,"try-error")) return('alpha_est doesn\'t belong to the interval')
 
-    sigma_est<-try(((alpha_est*a_p(-p)*m_denom_est/2/gamma(p/alpha_est))^(-1/p))/(Norm_alpha(h_kr,alpha=alpha_est,k=k_est,r=1,H=H_est,l=0)$result))
+    sigma_est<-try(((alpha_est*a_p(-p)*m_denom_est/2/gamma(p/alpha_est))^(-1/p))/(Norm_alpha(h_kr,alpha=alpha_est,k=k_est,r=1,H=H_est,l=0)$result), silent=T)
     if(is(sigma_est,"try-error")) return('Problems with computing sigma estimate')
 
     list(alpha=alpha_est, H=H_est, sigma=sigma_est)
