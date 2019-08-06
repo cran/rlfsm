@@ -11,14 +11,14 @@ MinContrastEstim(path, k, p, order_GH)
 
 \item{k}{order of increments.}
 
-\item{p}{a positive number, the power used for \code{\link{H_hat}}.}
+\item{p}{any real number, the power used for \code{\link{H_hat}}.}
 
 \item{order_GH}{number of weights in the Gauss-Hermite approximation of the integral, see the \code{gauss.hermite} function from the spatstat package.}
 }
 \description{
 Estimates H using the \code{\link{H_hat}} function while sigma and alpha are obtained via
-\deqn{argmin_{\sigma, \alpha} \int_{0}^{\infty} (\varphi_n(t) - \varphi_{\sigma, \alpha, H_hat}(t))^2 exp(-t^2) d t},
-where \eqn{\varphi_n} is the empirical characteristic function, see \code{\link{phi}}, and \eqn{\varphi_{\sigma, \alpha, H_hat}} is the characteristic function of the kth order increment \eqn{\Delta_{k, k} X}, see also \code{\link{increments}}.
+\deqn{\arg\min_{\sigma, \alpha} \int_{0}^{\infty} (\varphi_n(t) - \varphi_{\sigma, \alpha, H_{hat}}(t))^2 \exp(-t^2/2) d t},
+where \eqn{\varphi_n} is the empirical characteristic function, see \code{\link{phi}}, and \eqn{\varphi_{\sigma, \alpha, H_{hat}}} is the characteristic function of the kth order increment wrt the parameters \eqn{\sigma, \alpha, H_{hat}}, see also \code{\link{increment}}.
 }
 \details{
 This algorithm approximates the above integral using Gauss-Hermite quadrature and uses the \code{L-BFGS-B} method from the \code{optim} function to minimize over the parameters sigma and alpha.
