@@ -8,7 +8,7 @@ k<-2; p<-0.3; p_prime<-0.1
 t1<-1; t2<-2
 ###################
 
-List<-path(N,m,M,alpha,H,sigma,freq='L',disable_X=FALSE,levy_increments=NULL,seed=NA)
+List<-path(N,m,M,alpha,H,sigma,freq='L',disable_X=FALSE,levy_increments=NULL,seed=NULL)
 X<-List$lfsm
 
 X_1=c(1,4,3,6,8,5,3,5,8,5,1,8,6)

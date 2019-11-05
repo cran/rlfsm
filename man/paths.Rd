@@ -4,7 +4,7 @@
 \alias{paths}
 \title{Generator of a set of lfsm paths.}
 \usage{
-paths(N_var, parallel, seed_list = rep(x = NA, times = N_var), ...)
+paths(N_var, parallel, seed_list = rep(x = NULL, times = N_var), ...)
 }
 \arguments{
 \item{N_var}{number of lfsm paths to generate}

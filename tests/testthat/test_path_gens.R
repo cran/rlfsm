@@ -15,7 +15,7 @@ test_that("a_tilda should produce a number", {
 
 ###################
 
-List<-path(N,m,M,alpha,H,sigma,freq='L',disable_X=FALSE,levy_increments=NULL,seed=NA)
+List<-path(N,m,M,alpha,H,sigma,freq='L',disable_X=FALSE,levy_increments=NULL,seed=NULL)
 X<-List$lfsm
 
 
@@ -89,4 +89,45 @@ test_that("Seeded pregenerated increments supplied to path produce the same path
 ###################
 
 
+#### New parameter setup
+m<-25; M<-60; N<-10
+alpha<-1.8; H<-0.8; sigma<-1.8
+k<-2; p<-0.3; p_prime<-0.1
+t1<-1; t2<-2
 ###################
+
+
+List<-path(N,m,M,alpha,H,sigma,freq='L',disable_X=FALSE,levy_increments=NULL,seed=NULL)
+Fast_path<-rlfsm:::path_fast(N,m,M,alpha,H,sigma,freq='L')
+
+test_that("Paths work with different M and N", {
+    expect_is(List, 'list')
+    expect_is(Fast_path, 'numeric')
+})
+###################
+
+#### New parameter setup
+m<-25; M<-60; N<-10
+alpha<-0.8; H<-0.4; sigma<-0.2
+k<-2; p<-0.3; p_prime<-0.1
+t1<-1; t2<-2
+###################
+
+
+List<-path(N,m,M,alpha,H,sigma,freq='L',disable_X=FALSE,levy_increments=NULL,seed=NULL)
+Fast_path<-rlfsm:::path_fast(N,m,M,alpha,H,sigma,freq='L')
+
+test_that("Paths work with negative H-1/alpha", {
+    expect_is(List, 'list')
+    expect_is(Fast_path, 'numeric')
+})
+###################
+
+
+List<-path(N,m,M,alpha,H,sigma,freq='H',disable_X=FALSE,levy_increments=NULL,seed=NULL)
+Fast_path<-rlfsm:::path_fast(N,m,M,alpha,H,sigma,freq='H')
+
+test_that("Paths work with freq='H'", {
+    expect_is(List, 'list')
+    expect_is(Fast_path, 'numeric')
+})

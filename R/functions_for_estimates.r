@@ -104,7 +104,7 @@ increments<-function(k,r,path) {
 #' Pths<-lapply(X=S,FUN=path_lfsm,
 #'              m=m, M=M, alpha=alpha, sigma=sigma, H=H,
 #'              freq=freq, disable_X = FALSE,
-#'              levy_increments = NULL, seed = NA)
+#'              levy_increments = NULL, seed = NULL)
 #'
 #' f_phi<-function(t,x) cos(t*x)
 #' f_pow<-function(x,p) (abs(x))^p
@@ -359,18 +359,18 @@ LofF<-unclass(lsf.str())[1:length(lsf.str())]
 #'
 #' @export
 #'
-paths<-function(N_var,parallel,seed_list=rep(x=NA, times = N_var),...){
+paths<-function(N_var,parallel,seed_list=rep(x=NULL, times = N_var),...){
     ind_par<-NULL # avoids NOTEs when being built
-    if(length(seed_list)!=N_var) {stop('Seed_list must be equal to N_var')} else
+    if(length(seed_list)!=N_var & !is.null(seed_list)) {stop('Seed_list must be equal to N_var')} else
     {
-    # Switcher between parallel and consequtive executions
-    `%switch_do%` <- ifelse(parallel, `%dopar%`, `%do%`)
-    r<-matrix()
-    r<-foreach::foreach (ind_par = 1:N_var, .combine = cbind, .packages='stabledist', .export = LofF) %switch_do% {
-	    X<-path(seed=seed_list[ind_par],...)
-	    X$lfsm
-    }
-    r
+        # Switcher between parallel and consequtive executions
+        `%switch_do%` <- ifelse(parallel, `%dopar%`, `%do%`)
+        r<-matrix()
+        r<-foreach::foreach (ind_par = 1:N_var, .combine = cbind, .packages='stabledist', .export = LofF) %switch_do% {
+	        X<-path(seed=seed_list[ind_par],...)
+	        X$lfsm
+        }
+        r
     }
 }
 

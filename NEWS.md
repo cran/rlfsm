@@ -1,9 +1,18 @@
+# rlfsm 1.0.0
+
+* path function deals with index shift differently now. On top of that, the default value for seed is NULL.
+
+* More autotests were added
+
+* CLT was deprecated and replaced by MCestimLFSM
+
+* Some bugs associated with plot functions were fixed
+
 # rlfsm 0.3.1
 
 * Automated testing was implemented via testthat package
 
 * Documentation slightly improved
-
 
 # rlfsm 0.2.1
 
@@ -16,7 +25,6 @@
 * New plotting function for rlfsm sample paths was added.
 
 * Slight changes to documentation were introduced.
-
 
 # rlfsm 0.2.0
 

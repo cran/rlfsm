@@ -2,18 +2,18 @@
 % Please edit documentation in R/PLot_bias_and_variance_of_an_estimate.r
 \name{Plot_vb}
 \alias{Plot_vb}
-\title{A function to plot variance- and bias dependencies on n. Works in conjunction with \code{\link{CLT}} function.}
+\title{A function to plot variance- and bias dependencies of estimators on the lengths of sample paths. Works in conjunction with \code{\link{MCestimLFSM}} function.}
 \usage{
 Plot_vb(data)
 }
 \arguments{
-\item{data}{bias/variance data frame produced by CLT}
+\item{data}{a list created by \code{\link{MCestimLFSM}}}
 }
 \value{
-The function returns a ggplot graph.
+The function returns a ggplot2 graph.
 }
 \description{
-A function to plot variance- and bias dependencies on n. Works in conjunction with \code{\link{CLT}} function.
+A function to plot variance- and bias dependencies of estimators on the lengths of sample paths. Works in conjunction with \code{\link{MCestimLFSM}} function.
 }
 \examples{
 
@@ -26,11 +26,11 @@ p<-.4; p_prime<-.2; t1<-1; t2<-2
 k<-2; NmonteC<-50
 
 # Here is the continuous H-1/alpha inference procedure
-theor_3_1_H_clt<-CLT(s=S,fr='H',Nmc=NmonteC,
+theor_3_1_H_clt<-MCestimLFSM(s=S,fr='H',Nmc=NmonteC,
                      m=m,M=M,alpha=alpha,H=H,
                      sigma=sigma,ContinEstim,
                      t1=t1,t2=t2,p=p,k=k)
-Plot_vb(theor_3_1_H_clt$BSdM)
+Plot_vb(theor_3_1_H_clt)
 
 \donttest{
 # More demanding example (it is better to use multicore setup)
@@ -43,11 +43,11 @@ p<-.4; t1<-1; t2<-2
 NmonteC<-50
 
 # Here is the continuous H-1/alpha inference procedure
-theor_4_1_H_clt<-CLT(s=S,fr='H',Nmc=NmonteC,
+theor_4_1_H_clt<-MCestimLFSM(s=S,fr='H',Nmc=NmonteC,
                      m=m,M=M,alpha=alpha,H=H,
                      sigma=sigma,GenLowEstim,
                      t1=t1,t2=t2,p=p)
-Plot_vb(theor_4_1_H_clt$BSdM)
+Plot_vb(theor_4_1_H_clt)
 }
 
 }

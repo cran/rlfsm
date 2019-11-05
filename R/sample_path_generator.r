@@ -81,7 +81,7 @@ a_tilda<-function(N, m, M, alpha, H){
 #'
 #' @export
 #'
-path<-function(N=NULL,m,M,alpha,H,sigma,freq,disable_X=FALSE,levy_increments=NULL,seed=NA){
+path<-function(N=NULL,m,M,alpha,H,sigma,freq,disable_X=FALSE,levy_increments=NULL,seed=NULL){
 
     if(is.null(N) & is.null(levy_increments)) stop('Levy motion is not specified in any way')
     if(!is.null(N) & !is.null(levy_increments)) stop('Both levy_increments and N are specified')
@@ -89,27 +89,16 @@ path<-function(N=NULL,m,M,alpha,H,sigma,freq,disable_X=FALSE,levy_increments=NUL
     #### Computing increments ####
     if(is.null(N)) {
 
-            # !!!!!!! the logic must be checked
-            # m(M+N) points of LM are taken; snapshot
-            # We could specify increments of levy motion instead of levy motion. lm implies unnecessary summations
-            # add full (M+N)m levy motion as an output ? -> generate LM then substitute it to generate lfsm
-            lenLevyInc<-length(levy_increments)
+        lenLevyInc<-length(levy_increments)
+        # Integerness of N is checked numerically, so there may be false positives.
+        N<-lenLevyInc/m-M; if(!(N%%1==0)) stop('N is not integer')
 
-            # Integerness of N is checked numerically, so there may be false positives.
-            N<-lenLevyInc/m-M; if(!(N%%1==0)) stop('N is not integer')
-            Z<-c(levy_increments[(m*M+1):(m*(N+M))],levy_increments[1:(m*M)]) # increments of the levy motion
+    } else {
 
-        } else {
+        set.seed(seed)
+        levy_increments<-rstable(m*(N+M),alpha,beta=0) # standard SaS variables
 
-            ### Part 1. Generating levy motion.
-
-            #### clause 3
-
-            if(!is.na(seed)) set.seed(seed)
-            Z<-rstable(m*(N+M),alpha,beta=0) # standart SaS variables
-            levy_increments<-c(Z[(m*N+1):(m*(M+N))],Z[1:(m*N)])
-
-        }
+    }
 
 
     ### Setting of the frequency
@@ -121,13 +110,12 @@ path<-function(N=NULL,m,M,alpha,H,sigma,freq,disable_X=FALSE,levy_increments=NUL
 
 
     #### Extraction of levy motion
-    #L_noise<-Z[1:(m*N)]
     LM<-vector(mode="numeric",length=N)
     LM_N<-0
 
     for(i in 1:N){
 
-        LM[i]<-LM_N+sum(Z[(m*(i-1)+1):(m*i)])
+        LM[i]<-LM_N+sum(levy_increments[m*M+((m*(i-1)+1):(m*i))])
         LM_N<-LM[i]
 
     }
@@ -137,31 +125,31 @@ path<-function(N=NULL,m,M,alpha,H,sigma,freq,disable_X=FALSE,levy_increments=NUL
 
     if(disable_X){
 
-	    X<-NULL
+        X<-NULL
 
     } else {
 
-	    ##### clause 2
-	    a_t<-a_tilda(N,m,M,alpha,H)*sigma
+        ##### clause 2
+        a_t<-a_tilda(N,m,M,alpha,H)*sigma
 
-	    a_hat<-fft(a_t)
+        a_hat<-fft(a_t)
 
-    	##### clause 3
-    	Z_hat<-fft(Z)
+        ##### clause 3
+        Z_hat<-fft(levy_increments)
 
-    	#### clause 4
-	    # In R the definition of inverse fft lacks the
-	    # normalization constant, so here we divide by it explicitly.
-	    W_raw<-fft(a_hat*Z_hat, inverse=TRUE)/length(a_hat)
-	    W<-W_raw[1:(m*N)]
+        #### clause 4
+        # In R the definition of inverse fft lacks the
+        # normalization constant, so here we divide by it explicitly.
+        W_raw<-fft(a_hat*Z_hat, inverse=TRUE)/length(a_hat)
+        W<-W_raw[m*M+(1:(m*N))]
 
-	    #### clause 5
-	    index_m<-m*(1:(length(W)/m))
-	    Y_m_M<-Re(W[index_m]) # although W is real, 0i-part isn't needed
+        #### clause 5
+        index_m<-m*(1:(length(W)/m))
+        Y_m_M<-Re(W[index_m]) # W is real, 0i-part isn't needed
 
-	    X<-vector(mode="numeric",length=length(Y_m_M))
-	    X<-cumsum(Y_m_M)
-	    X<-c(0,X) # lfsm starts from zero (t=0 => kernel = 0)
+        X<-vector(mode="numeric",length=length(Y_m_M))
+        X<-cumsum(Y_m_M)
+        X<-c(0,X) # lfsm starts from zero (t=0 => kernel = 0)
 
     }
 
@@ -179,12 +167,8 @@ path<-function(N=NULL,m,M,alpha,H,sigma,freq,disable_X=FALSE,levy_increments=NUL
 # Technical function. Unavailable for users
 path_fast<-function(N,m,M,alpha,H,sigma,freq){
 
-        ### Part 1. Generating levy motion.
-
-        #### clause 3
-        Z<-rstable(m*(N+M),alpha,beta=0) # standart SaS variables
-        levy_increments<-c(Z[(m*N+1):(m*(M+N))],Z[1:(m*N)])
-
+    ### Part 1. Generating Levy motion.
+    levy_increments<-rstable(m*(N+M),alpha,beta=0) # standard SaS variables
 
     ### Setting of the frequency
 
@@ -201,7 +185,7 @@ path_fast<-function(N,m,M,alpha,H,sigma,freq){
 
     for(i in 1:N){
 
-        LM[i]<-LM_N+sum(Z[(m*(i-1)+1):(m*i)])
+        LM[i]<-LM_N+sum(levy_increments[m*M+((m*(i-1)+1):(m*i))])
         LM_N<-LM[i]
 
     }
@@ -210,27 +194,27 @@ path_fast<-function(N,m,M,alpha,H,sigma,freq){
     ### Part 2. Generating linear fractional stable motion.
 
 
-        ##### clause 2
-        a_t<-a_tilda(N,m,M,alpha,H)*sigma
+    ##### clause 2
+    a_t<-a_tilda(N,m,M,alpha,H)*sigma
 
-        a_hat<-fft(a_t)
+    a_hat<-fft(a_t)
 
-        ##### clause 3
-        Z_hat<-fft(Z)
+    ##### clause 3
+    Z_hat<-fft(levy_increments)
 
-        #### clause 4
-        # In R the definition of inverse fft lacks the
-        # normalization constant, so here we divide by it explicitly.
-        W_raw<-fft(a_hat*Z_hat, inverse=TRUE)/length(a_hat)
-        W<-W_raw[1:(m*N)]
+    #### clause 4
+    # In R the definition of inverse fft lacks the
+    # normalization constant, so here we divide by it explicitly.
+    W_raw<-fft(a_hat*Z_hat, inverse=TRUE)/length(a_hat)
+    W<-W_raw[m*M+(1:(m*N))]
 
-        #### clause 5
-        index_m<-m*(1:(length(W)/m))
-        Y_m_M<-Re(W[index_m]) # although W is real, 0i-part isn't needed
+    #### clause 5
+    index_m<-m*(1:(length(W)/m))
+    Y_m_M<-Re(W[index_m]) # although W is real, 0i-part isn't needed
 
-        X<-vector(mode="numeric",length=length(Y_m_M))
-        X<-cumsum(Y_m_M)
-        X<-c(0,X) # lfsm starts from zero (t=0 => kernel = 0)
+    X<-vector(mode="numeric",length=length(Y_m_M))
+    X<-cumsum(Y_m_M)
+    X<-c(0,X) # lfsm starts from zero (t=0 => kernel = 0)
 
 
     multiplier*X

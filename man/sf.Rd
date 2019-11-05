@@ -46,7 +46,7 @@ path_lfsm<-function(...){
 Pths<-lapply(X=S,FUN=path_lfsm,
              m=m, M=M, alpha=alpha, sigma=sigma, H=H,
              freq=freq, disable_X = FALSE,
-             levy_increments = NULL, seed = NA)
+             levy_increments = NULL, seed = NULL)
 
 f_phi<-function(t,x) cos(t*x)
 f_pow<-function(x,p) (abs(x))^p

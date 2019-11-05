@@ -1,9 +1,9 @@
 
 #### PLot bias and variance ####
 
-#' A function to plot variance- and bias dependencies on n. Works in conjunction with \code{\link{CLT}} function.
-#' @param data bias/variance data frame produced by CLT
-#' @return The function returns a ggplot graph.
+#' A function to plot variance- and bias dependencies of estimators on the lengths of sample paths. Works in conjunction with \code{\link{MCestimLFSM}} function.
+#' @param data a list created by \code{\link{MCestimLFSM}}
+#' @return The function returns a ggplot2 graph.
 #' @seealso \code{\link{Plot_dens}}
 #' @examples
 #'
@@ -16,11 +16,11 @@
 #' k<-2; NmonteC<-50
 #'
 #' # Here is the continuous H-1/alpha inference procedure
-#' theor_3_1_H_clt<-CLT(s=S,fr='H',Nmc=NmonteC,
+#' theor_3_1_H_clt<-MCestimLFSM(s=S,fr='H',Nmc=NmonteC,
 #'                      m=m,M=M,alpha=alpha,H=H,
 #'                      sigma=sigma,ContinEstim,
 #'                      t1=t1,t2=t2,p=p,k=k)
-#' Plot_vb(theor_3_1_H_clt$BSdM)
+#' Plot_vb(theor_3_1_H_clt)
 #'
 #' \donttest{
 #' # More demanding example (it is better to use multicore setup)
@@ -33,11 +33,11 @@
 #' NmonteC<-50
 #'
 #' # Here is the continuous H-1/alpha inference procedure
-#' theor_4_1_H_clt<-CLT(s=S,fr='H',Nmc=NmonteC,
+#' theor_4_1_H_clt<-MCestimLFSM(s=S,fr='H',Nmc=NmonteC,
 #'                      m=m,M=M,alpha=alpha,H=H,
 #'                      sigma=sigma,GenLowEstim,
 #'                      t1=t1,t2=t2,p=p)
-#' Plot_vb(theor_4_1_H_clt$BSdM)
+#' Plot_vb(theor_4_1_H_clt)
 #' }
 #'
 #' @export
@@ -46,16 +46,27 @@ Plot_vb<-function(data){
     s<-NULL # avoids NOTEs when being builded
     value<-NULL # avoids NOTEs when being builded
 
-    data<-as.data.frame(data)
-    data_to_plot <- reshape2::melt(data, id.vars="s")
+    bs <- data$biases
+    ms <- data$means
+    sds <- data$sds
+
+    part_bs <- reshape2::melt(bs, id.vars="s")
+    part_bs$type='bias'
+
+    part_ms <- reshape2::melt(ms, id.vars="s")
+    part_ms$type='mean'
+
+    part_sds <- reshape2::melt(sds, id.vars="s")
+    part_sds$type='sd'
+
+    data_to_plot <- rbind(part_bs, part_ms, part_sds)
 
     pl <- ggplot2::ggplot(data_to_plot, aes(x=s, y=value)) + ggplot2::geom_point(colour="cyan4") #geom_line(size = 0.5, colour = "blue") #
-    pl<-pl + ggplot2::facet_wrap(~variable, scales = "free", labeller = label_both) #facet_grid(alpha ~ H, scales = "free", labeller = label_both)
+    pl<-pl + ggplot2::facet_wrap(variable~type, scales = "free", labeller = label_both) #facet_grid(alpha ~ H, scales = "free", labeller = label_both)
     pl<-pl + ggplot2::theme_bw()
     pl<-pl + ggplot2::geom_hline(yintercept=0, colour="brown")
-    pl<-pl+ggplot2::geom_smooth() # local regression
+    pl<-pl + ggplot2::geom_smooth() # local regression
 
-    #ggplot2::ggsave("Variance and bias dependence on n.pdf", width = 10, height = 10)
     pl
 }
 
@@ -65,8 +76,8 @@ Plot_vb<-function(data){
 # A special version for MP paper (black and white palette)
 Plot_vb_paper<-function(data){
 
-    n<-NULL # avoids NOTEs when being builded
-    value<-NULL # avoids NOTEs when being builded
+    n<-NULL # avoids NOTEs when being built
+    value<-NULL # avoids NOTEs when being built
 
     data<-as.data.frame(data)
     data_to_plot <- melt(data, id.vars="n")

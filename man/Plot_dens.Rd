@@ -4,18 +4,18 @@
 \alias{Plot_dens}
 \title{(alpha,H,sigma)- density plot}
 \usage{
-Plot_dens(par_vec = c("alpha", "H", "sigma"), CLT_data, Nnorm = 1e+07)
+Plot_dens(par_vec = c("alpha", "H", "sigma"), MC_data, Nnorm = 1e+07)
 }
 \arguments{
 \item{par_vec}{vector of parameters which are to be plotted}
 
-\item{CLT_data}{a list created by \code{\link{CLT}}()}
+\item{MC_data}{a list created by \code{\link{MCestimLFSM}}}
 
 \item{Nnorm}{number of point sampled from standard normal distribution}
 }
 \description{
 Plots the densities of the parameters (alpha,H,sigma) estimated in Monte-Carlo experiment.
-Works in conjunction with \code{\link{CLT}} function.
+Works in conjunction with \code{\link{MCestimLFSM}} function.
 }
 \examples{
 \donttest{
@@ -27,11 +27,11 @@ t1<-1; t2<-2; k<-2
 NmonteC<-5e2
 S<-c(1e3,1e4)
 alpha<-.8; H<-0.8; sigma<-0.3
-theor_4_1_clt_new<-CLT(s=S,fr='L',Nmc=NmonteC,
+theor_4_1_clt_new<-MCestimLFSM(s=S,fr='L',Nmc=NmonteC,
                        m=m,M=M,
                        alpha=alpha,H=H,sigma=sigma,
                        GenLowEstim,t1=t1,t2=t2,p=p)
-l_plot<-Plot_dens(par_vec=c('sigma','alpha','H'), CLT_data=theor_4_1_clt_new, Nnorm=1e7)
+l_plot<-Plot_dens(par_vec=c('sigma','alpha','H'), MC_data=theor_4_1_clt_new, Nnorm=1e7)
 l_plot
 
 }
