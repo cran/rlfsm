@@ -9,6 +9,7 @@
 #' @import methods
 #' @import plyr
 #' @import grid
+#' @import Rcpp
 #' @importFrom stabledist rstable
 #' @importFrom reshape2 melt
 #' @importFrom Rdpack reprompt

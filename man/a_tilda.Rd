@@ -2,9 +2,12 @@
 % Please edit documentation in R/sample_path_generator.r
 \name{a_tilda}
 \alias{a_tilda}
+\alias{a_tilda_R}
 \title{Creates the corresponding value from the paper by Stoev and Taqqu (2004).}
 \usage{
 a_tilda(N, m, M, alpha, H)
+
+a_tilda_R(N, m, M, alpha, H)
 }
 \arguments{
 \item{N}{a number of points of the lfsm.}
@@ -18,8 +21,15 @@ a_tilda(N, m, M, alpha, H)
 \item{H}{Hurst parameter}
 }
 \description{
-Creates the corresponding value from the paper by Stoev and Taqqu (2004).
+a_tilda triggers a_tilda_cpp which is written in C++ and essentially
+performs the computation of the value.
 }
+\section{Functions}{
+\itemize{
+\item \code{a_tilda_R}: Old version of a_tilda function. Written entirely in R. It
+was left for comparison, testing and backward compatibility.
+}}
+
 \references{
 \insertRef{StoevTaqqu04}{rlfsm}
 }

@@ -4,8 +4,18 @@
 \alias{path}
 \title{Generator of linear fractional stable motion}
 \usage{
-path(N = NULL, m, M, alpha, H, sigma, freq, disable_X = FALSE,
-  levy_increments = NULL, seed = NULL)
+path(
+  N = NULL,
+  m,
+  M,
+  alpha,
+  H,
+  sigma,
+  freq,
+  disable_X = FALSE,
+  levy_increments = NULL,
+  seed = NULL
+)
 }
 \arguments{
 \item{N}{a number of points of the lfsm.}

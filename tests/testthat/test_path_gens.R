@@ -1,5 +1,5 @@
 
-context("Work of sample path generators")
+context("Work of sample path generators and auxiliary functions")
 
 #### Parameter setup
 m<-25; M<-60; N<-2^12-M
@@ -8,16 +8,8 @@ k<-2; p<-0.3; p_prime<-0.1
 t1<-1; t2<-2
 ###################
 
-
-test_that("a_tilda should produce a number", {
-    expect_is(a_tilda(N,m,M,alpha,H), "numeric")
-})
-
-###################
-
 List<-path(N,m,M,alpha,H,sigma,freq='L',disable_X=FALSE,levy_increments=NULL,seed=NULL)
 X<-List$lfsm
-
 
 ###################
 #### Check correctness of scaling with sigma ####

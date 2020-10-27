@@ -363,7 +363,7 @@ paths<-function(N_var,parallel,seed_list=rep(x=NULL, times = N_var),...){
     ind_par<-NULL # avoids NOTEs when being built
     if(length(seed_list)!=N_var & !is.null(seed_list)) {stop('Seed_list must be equal to N_var')} else
     {
-        # Switcher between parallel and consequtive executions
+        # Switcher between parallel and consecutive executions
         `%switch_do%` <- ifelse(parallel, `%dopar%`, `%do%`)
         r<-matrix()
         r<-foreach::foreach (ind_par = 1:N_var, .combine = cbind, .packages='stabledist', .export = LofF) %switch_do% {
@@ -381,7 +381,6 @@ paths<-function(N_var,parallel,seed_list=rep(x=NULL, times = N_var),...){
 #' @param true_val true value of the estimated parameter
 #' @param Est estimator (i.e. H_hat)
 #' @param ... parameters to pass to Est
-#' @inheritParams path
 #' @examples
 #' m<-45; M<-60; N<-2^10-M
 #' alpha<-1.8; H<-0.8; sigma<-0.3

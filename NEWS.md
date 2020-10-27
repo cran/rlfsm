@@ -1,3 +1,9 @@
+# rlfsm 1.0.1
+
+* References and DESCRIPTION were updated
+
+* a_tilda was rewritten in C++. The old function was left for compatibility and tests under the name a_tilda_R.
+
 # rlfsm 1.0.0
 
 * path function deals with index shift differently now. On top of that, the default value for seed is NULL.

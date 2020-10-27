@@ -4,10 +4,25 @@
 
 
 #' Creates the corresponding value from the paper by Stoev and Taqqu (2004).
+#'
+#' a_tilda triggers a_tilda_cpp which is written in C++ and essentially
+#' performs the computation of the value.
 #' @references \insertRef{StoevTaqqu04}{rlfsm}
 #' @export
 #' @inheritParams path
-a_tilda<-function(N, m, M, alpha, H){
+#' @useDynLib rlfsm, .registration = TRUE
+#'
+a_tilda <- function(N, m, M,  alpha, H){
+    vv<-vector(mode='double', length = m*(M+N))
+    vv[seq(1, m*M, 1)]<-a_tilda_cpp(N=N, m=m, M=M, alpha=alpha, H=H)
+    vv_n <- as.numeric(vv)
+}
+
+#' @export
+#' @inheritParams path
+#' @describeIn a_tilda Old version of a_tilda function. Written entirely in R. It
+#' was left for comparison, testing and backward compatibility.
+a_tilda_R<-function(N, m, M, alpha, H){
 
     a<-vector(mode="numeric", length=m*(M+N)) # it creates 0 in mM to m(M+N) anyway
 
