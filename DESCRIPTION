@@ -2,7 +2,7 @@ Package: rlfsm
 Type: Package
 Title: Simulations and Statistical Inference for Linear Fractional
         Stable Motions
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: c(
   person("Dmitry", "Otryakhin", , "d.otryakhin.acad@protonmail.ch", c("aut", "cre"),
          comment = c(ORCID = "0000-0002-4700-7221")),
@@ -23,10 +23,11 @@ LazyData: true
 RoxygenNote: 7.1.1
 Depends: methods, foreach, doParallel
 Imports: ggplot2, stabledist, reshape2, plyr, Rdpack, Rcpp
-Suggests: elliptic, spatstat, testthat, stringi
+Suggests: elliptic, spatstat.core, spatstat (>= 2.0-0), testthat,
+        stringi
 RdMacros: Rdpack
 LinkingTo: Rcpp
 NeedsCompilation: yes
-Packaged: 2020-10-27 20:28:06 UTC; d
+Packaged: 2021-03-15 16:53:13 UTC; dmot8856
 Repository: CRAN
-Date/Publication: 2020-10-27 21:00:03 UTC
+Date/Publication: 2021-03-15 17:40:02 UTC

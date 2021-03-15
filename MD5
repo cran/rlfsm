@@ -1,9 +1,9 @@
-fbbc7608addb7dc0d87b26b9364bc7d5 *DESCRIPTION
+b461af23a838ba6bd2f920ccfc2a3384 *DESCRIPTION
 4b34ee9cd5305fbff727e14ed4d3c980 *NAMESPACE
-b3b75917e02038caeac3ae3878517fcf *NEWS.md
+12e727ac04d62d61da818d64680fc140 *NEWS.md
 856f8239ea10681401c262ba86754954 *R/CLT.R
 9c858d733902a02aeed1c63577794d63 *R/MC.R
-66a88bc262d6f5c838cd83e5633e2b70 *R/MinContrastEstim.R
+8291065a09b508926488bc6f89f88e5f *R/MinContrastEstim.R
 9f69b36287e18aadca99c6d825a31d5b *R/PLot_bias_and_variance_of_an_estimate.r
 0a260814927ae583e76494176d4a58dd *R/PLotting_sample_paths_stable.R
 ab1703a19f13c4efb0fdf133e7f3631a *R/Plot_function_for_empirical_distributions.R
@@ -14,7 +14,7 @@ c973a79e5c37be0592305f2d925a3733 *R/RcppExports.R
 6b4f09d7b15dda692e5e9317d9d7b2f8 *R/limit_theorems.R
 6c8e169babbbd40eb5220b34e32d5569 *R/sample_path_generator.r
 4f16fddd5b847cb86ca4d3f00ad45f83 *R/tech_funcs.R
-ad376920e348200aeeb2383997eac7ae *build/partial.rdb
+b00b600c2a075479fe2025af257cd94c *build/partial.rdb
 85e054e80e656de98b8f5bddaf78cf42 *inst/CITATION
 3f1b34a7a03b6a57c887d25150ff9b8d *inst/REFERENCES.bib
 fc489cabb69b0f59c32348e232b119bb *man/ContinEstim.Rd

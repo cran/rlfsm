@@ -1,8 +1,12 @@
+# rlfsm 1.0.2
+
+* The package was adapted to changes in spatstat.
+
 # rlfsm 1.0.1
 
-* References and DESCRIPTION were updated
+* References were updated
 
-* a_tilda was rewritten in C++. The old function was left for compatibility and tests under the name a_tilda_R.
+* a_tilda was rewritten in C++. The old function was left for compatibility under the name a_tilda.
 
 # rlfsm 1.0.0
 
