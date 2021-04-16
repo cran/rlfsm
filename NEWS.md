@@ -1,3 +1,7 @@
+# rlfsm 1.0.3
+
+* Minor fixes in examples and Description.
+
 # rlfsm 1.0.2
 
 * The package was adapted to changes in spatstat.

@@ -31,7 +31,8 @@ alpha0 = 1.8
 H0 = 0.8
 sigma0 = 0.3
 n = 100
-X <- path(N = n, m = m0, M = M0, alpha = alpha0, H = H0, sigma = sigma0, freq = 'L')$lfsm
+
+X <- path(N = n, m = m0, M = M0, alpha = alpha0, H = H0, sigma = sigma0, freq = 'L', seed = 1)$lfsm
 MinContrastEstim(path = X, k = 2, p = 0.4, order_GH = 8)
 
 }
