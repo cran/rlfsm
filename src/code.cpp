@@ -17,19 +17,6 @@ double PP(int j, int m, double Ha) {
 }
 
 
-/* This function doesnt work properly and isnt used
- // [[Rcpp::export]]
- double PLUS(int j, int m, double beta) {
- double F=0;
- if (j/m-1 > 0) {
- F=PP(j-m, m, beta);
- } else {
-
- }
- return(F);
- }
- */
-
 
 // [[Rcpp::export]]
 std::vector<double> a_tilda_cpp(int N, int m, int M, double alpha, double H){

@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // a_tilda_cpp
 std::vector<double> a_tilda_cpp(int N, int m, int M, double alpha, double H);
 RcppExport SEXP _rlfsm_a_tilda_cpp(SEXP NSEXP, SEXP mSEXP, SEXP MSEXP, SEXP alphaSEXP, SEXP HSEXP) {
