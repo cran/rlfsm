@@ -11,7 +11,7 @@ U_ghuv(alpha, sigma, g, h, u, v, ...)
 
 \item{sigma}{Scale parameter of lfsm}
 
-\item{g, h}{functions \eqn{g,h: \R to \R} with finite alpha-norm (see \code{\link{Norm_alpha}}).}
+\item{g, h}{functions \eqn{g,h: \R \to \R} with finite alpha-norm (see \code{\link{Norm_alpha}}).}
 
 \item{v, u}{real numbers}
 
@@ -19,7 +19,7 @@ U_ghuv(alpha, sigma, g, h, u, v, ...)
 }
 \description{
 It is used when random variables do not have finite second moments, and thus, the covariance matrix is not defined.
-For \eqn{X= \int_{\R} g_s dL_s} and \eqn{Y= \int_{\R} h_s dL_s} with \eqn{\| g \|_{\alpha}, \| h\|_{\alpha}< \infty}. Then the measure of dependence is given by \eqn{U_{g,h}: \R^2 to \R} via
+For \eqn{X= \int_{\R} g_s dL_s} and \eqn{Y= \int_{\R} h_s dL_s} with \eqn{\| g \|_{\alpha}, \| h\|_{\alpha}< \infty}. Then the measure of dependence is given by \eqn{U_{g,h}: \R^2 \to \R} via
 \deqn{U_{g,h} (u,v)=\exp(- \sigma^{\alpha}{\| ug +vh \|_{\alpha}}^{\alpha} ) - \exp(- \sigma^{\alpha} ({\| ug \|_{\alpha}}^{\alpha} + {\| vh \|_{\alpha}}^{\alpha}))}
 }
 \examples{

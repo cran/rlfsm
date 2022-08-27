@@ -299,6 +299,7 @@ alpha_hat<-function(t1,t2,k,path,H,freq){
 ## sigma_hat estimation
 # H and alpha should be taken from estimates
 #' Statistical estimator for sigma
+#' @param t1 real number such that t1 > 0
 #' @inheritParams path
 #' @inheritParams ContinEstim
 #' @examples

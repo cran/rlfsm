@@ -7,7 +7,7 @@
 sigma_hat(t1, k, path, alpha, H, freq)
 }
 \arguments{
-\item{t1}{real number such that  t2 > t1 > 0}
+\item{t1}{real number such that t1 > 0}
 
 \item{k}{increment order}
 

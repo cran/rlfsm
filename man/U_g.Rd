@@ -7,9 +7,9 @@
 U_g(g, u, ...)
 }
 \arguments{
-\item{g}{functions \eqn{g,h: \R to \R} with finite alpha-norm (see \code{\link{Norm_alpha}}).}
+\item{g}{function \eqn{g: \R to \R} with finite alpha-norm (see \code{\link{Norm_alpha}}).}
 
-\item{u}{real numbers}
+\item{u}{real number}
 
 \item{...}{additional parameters to pass to Norm_alpha}
 }

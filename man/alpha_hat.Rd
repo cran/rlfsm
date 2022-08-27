@@ -7,9 +7,7 @@
 alpha_hat(t1, t2, k, path, H, freq)
 }
 \arguments{
-\item{t1}{real number such that  t2 > t1 > 0}
-
-\item{t2}{real number such that  t2 > t1 > 0}
+\item{t1, t2}{real number such that  t2 > t1 > 0}
 
 \item{k}{increment order}
 

@@ -43,7 +43,8 @@ U_gh<-function(g,h,u,v,...){
 #### U_g ####
 #' alpha norm of u*g
 #'
-#' @inheritParams U_ghuv
+#' @param g function \eqn{g: \R to \R} with finite alpha-norm (see \code{\link{Norm_alpha}}).
+#' @param u real number
 #' @param ... additional parameters to pass to Norm_alpha
 #' @examples
 #' g<-function(x) exp(-x^2)
@@ -63,10 +64,10 @@ U_g<-function(g,u,...){
 #' A dependence structure of 2 random variables.
 #'
 #' It is used when random variables do not have finite second moments, and thus, the covariance matrix is not defined.
-#' For \eqn{X= \int_{\R} g_s dL_s} and \eqn{Y= \int_{\R} h_s dL_s} with \eqn{\| g \|_{\alpha}, \| h\|_{\alpha}< \infty}. Then the measure of dependence is given by \eqn{U_{g,h}: \R^2 to \R} via
+#' For \eqn{X= \int_{\R} g_s dL_s} and \eqn{Y= \int_{\R} h_s dL_s} with \eqn{\| g \|_{\alpha}, \| h\|_{\alpha}< \infty}. Then the measure of dependence is given by \eqn{U_{g,h}: \R^2 \to \R} via
 #' \deqn{U_{g,h} (u,v)=\exp(- \sigma^{\alpha}{\| ug +vh \|_{\alpha}}^{\alpha} ) - \exp(- \sigma^{\alpha} ({\| ug \|_{\alpha}}^{\alpha} + {\| vh \|_{\alpha}}^{\alpha}))}
 #' @inheritParams path
-#' @param g,h functions \eqn{g,h: \R to \R} with finite alpha-norm (see \code{\link{Norm_alpha}}).
+#' @param g,h functions \eqn{g,h: \R \to \R} with finite alpha-norm (see \code{\link{Norm_alpha}}).
 #' @param v,u real numbers
 #' @param ... additional parameters to pass to U_gh and U_g
 #' @examples
@@ -98,6 +99,8 @@ U_ghuv<-function(alpha, sigma, g, h, u, v, ...){
 
 #### Theta ####
 # How to compute an error of an integral of an integral ? !!!!!!!!!!!!!!!!!!!!!!
+#' Function theta
+#'
 #' Function of the form
 #' \deqn{\theta(g,h)_{p} = a_p^{-2} \int_{\R^2}  |xy|^{-1-p}U_{g,h}(x,y) dxdy}
 #' @export

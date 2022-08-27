@@ -2,8 +2,7 @@
 % Please edit documentation in R/covariance_matrix.R
 \name{theta}
 \alias{theta}
-\title{Function of the form
-\deqn{\theta(g,h)_{p} = a_p^{-2} \int_{\R^2}  |xy|^{-1-p}U_{g,h}(x,y) dxdy}}
+\title{Function theta}
 \usage{
 theta(p, alpha, sigma, g, h)
 }
@@ -14,9 +13,7 @@ theta(p, alpha, sigma, g, h)
 
 \item{sigma}{Scale parameter of lfsm}
 
-\item{g}{functions \eqn{g,h: \R to \R} with finite alpha-norm (see \code{\link{Norm_alpha}}).}
-
-\item{h}{functions \eqn{g,h: \R to \R} with finite alpha-norm (see \code{\link{Norm_alpha}}).}
+\item{g, h}{functions \eqn{g,h: \R \to \R} with finite alpha-norm (see \code{\link{Norm_alpha}}).}
 }
 \description{
 Function of the form

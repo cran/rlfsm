@@ -7,13 +7,9 @@
 U_gh(g, h, u, v, ...)
 }
 \arguments{
-\item{g}{functions \eqn{g,h: \R to \R} with finite alpha-norm (see \code{\link{Norm_alpha}}).}
+\item{g, h}{functions \eqn{g,h: \R \to \R} with finite alpha-norm (see \code{\link{Norm_alpha}}).}
 
-\item{h}{functions \eqn{g,h: \R to \R} with finite alpha-norm (see \code{\link{Norm_alpha}}).}
-
-\item{u}{real numbers}
-
-\item{v}{real numbers}
+\item{v, u}{real numbers}
 
 \item{...}{additional parameters to pass to Norm_alpha}
 }

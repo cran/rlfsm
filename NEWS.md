@@ -1,3 +1,7 @@
+# rlfsm 1.1.2
+
+* Documentation was refreshed
+
 # rlfsm 1.1.1
 
 * Minimum contrast estimator was temporarily removed due to problems in spatstat package.

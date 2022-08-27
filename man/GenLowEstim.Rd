@@ -7,9 +7,7 @@
 GenLowEstim(t1, t2, p, path, freq = "L")
 }
 \arguments{
-\item{t1}{real number such that  t2 > t1 > 0}
-
-\item{t2}{real number such that  t2 > t1 > 0}
+\item{t1, t2}{real number such that  t2 > t1 > 0}
 
 \item{p}{power}
 
